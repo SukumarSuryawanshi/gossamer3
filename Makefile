@@ -36,6 +36,31 @@ compile: mod
 	-output "build/{{.Dir}}_$(VERSION)_{{.OS}}_{{.Arch}}/$(NAME)" \
 	${SOURCE_FILES}
 
+# Test builds locally without having to worry about hid stuff
+build_local:
+	rm -rf build
+	go mod vendor
+
+# 	Cloning the hid and placing it in the vendor/ directory as a workaround for known Golang issue
+#	  https://github.com/golang/go/issues/26366
+	git clone https://github.com/karalabe/hid.git
+	rm -rf vendor/github.com/karalabe/
+	mkdir vendor/github.com/karalabe/
+	mv hid vendor/github.com/karalabe/hid/
+
+	GOOS=windows GOARCH=amd64 go build -o build/gossamer_windows_amd64 cmd/gossamer3/*.go
+	GOOS=windows GOARCH=386 go build -o build/gossamer_windows_386 cmd/gossamer3/*.go
+	GOOS=linux GOARCH=amd64 go build -o build/gossamer_linux_amd64 cmd/gossamer3/*.go
+	GOOS=linux GOARCH=arm64 go build -o build/gossamer_linux_arm64 cmd/gossamer3/*.go
+# 	GOOS=darwin GOARCH=arm64 go build -o build/gossamer_darwin_arm64 cmd/gossamer3/*.go
+#	GOOS=darwin GOARCH=amd64 go build -o build/gossamer_darwin_amd64 cmd/gossamer3/*.go
+
+# 	Replace the vendor with original files
+	rm -rf vendor/
+	go mod vendor
+	go mod verify
+	go mod tidy
+
 # Run all the linters
 lint:
 	@gometalinter --vendor ./...
