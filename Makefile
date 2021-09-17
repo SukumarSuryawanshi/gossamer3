@@ -30,6 +30,7 @@ compile: mod
 	@$(BIN_DIR)/gox -ldflags "-X main.Version=$(VERSION)" \
 	-osarch="darwin/amd64" \
 	-osarch="linux/i386" \
+	-osarch="linux/arm64" \
 	-osarch="linux/amd64" \
 	-osarch="windows/amd64" \
 	-osarch="windows/i386" \
