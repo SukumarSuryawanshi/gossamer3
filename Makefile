@@ -11,7 +11,6 @@ BIN_DIR := $(CURDIR)/bin
 ci: prepare test
 
 prepare: prepare.metalinter
-	GOBIN=$(BIN_DIR) go install github.com/buildkite/github-release
 	GOBIN=$(BIN_DIR) go install github.com/mitchellh/gox
 	GOBIN=$(BIN_DIR) go install github.com/axw/gocov/gocov
 	GOBIN=$(BIN_DIR) go install golang.org/x/tools/cmd/cover
@@ -23,7 +22,6 @@ prepare.metalinter:
 
 mod:
 	@go mod download
-	@go mod tidy
 
 compile: mod
 	@rm -rf build/
