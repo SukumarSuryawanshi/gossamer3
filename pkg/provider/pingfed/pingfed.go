@@ -615,10 +615,10 @@ func (ac *Client) handlePasswordExpiring(ctx context.Context, doc *goquery.Docum
 	pingError := strings.TrimSpace(messages.Text())
 
 	// Print the error message
-	log.Println(pingError)
+	logrus.Debugln(pingError)
 
 	// Note to the users to know that their password is expiring soon
-	fmt.Println("Your password is expiring soon")
+	log.Println("Your password is expiring soon")
 
 	// Ignore the password change. The user needs to do this on their own.
 	form, err := page.NewFormFromDocument(doc, "form")
