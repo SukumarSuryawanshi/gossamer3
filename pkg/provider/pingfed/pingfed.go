@@ -605,12 +605,20 @@ func (ac *Client) handlePingMessage(ctx context.Context, doc *goquery.Document) 
 }
 
 func (ac *Client) handlePasswordExpiring(ctx context.Context, doc *goquery.Document) (context.Context, *http.Request, error) {
+	loginDetails, ok := ctx.Value(ctxKey("login")).(*creds.LoginDetails)
+	if !ok {
+		return ctx, nil, fmt.Errorf("no context value for 'login'")
+	}
+
 	// Extract the message
 	messages := doc.Find(".ping-messages>.ping-messages")
 	pingError := strings.TrimSpace(messages.Text())
 
 	// Print the error message
-	log.Println(pingError)
+	logrus.Debugln(pingError)
+
+	// Note to the users to know that their password is expiring soon
+	log.Println("Your password is expiring soon")
 
 	// Ignore the password change. The user needs to do this on their own.
 	form, err := page.NewFormFromDocument(doc, "form")
@@ -621,8 +629,9 @@ func (ac *Client) handlePasswordExpiring(ctx context.Context, doc *goquery.Docum
 	form.Values.Set("pf.passwordExpiring", "true")
 	form.Values.Set("pf.notificationCancel", "clicked")
 	form.Values.Set("pf.pcvId", "PDPCVOIDC")
-	req, err := form.BuildRequest()
+	form.URL = makeAbsoluteURL(form.URL, loginDetails.URL)
 
+	req, err := form.BuildRequest()
 	return ctx, req, err
 }
 
