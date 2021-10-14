@@ -541,7 +541,13 @@ func TestHandlePasswordExpiring(t *testing.T) {
 	require.Nil(t, err)
 
 	ac := Client{}
-	_, req, err := ac.handlePasswordExpiring(context.Background(), doc)
+	loginDetails := creds.LoginDetails{
+		Username: "fdsa",
+		Password: "secret",
+		URL:      "https://example.com/foo",
+	}
+	ctx := context.WithValue(context.Background(), ctxKey("login"), &loginDetails)
+	_, req, err := ac.handlePasswordExpiring(ctx, doc)
 	require.Nil(t, err)
 
 	b, err := ioutil.ReadAll(req.Body)
