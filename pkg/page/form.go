@@ -18,12 +18,35 @@ type Form struct {
 }
 
 func (form *Form) BuildRequest() (*http.Request, error) {
-	values := strings.NewReader(form.Values.Encode())
-	req, err := http.NewRequest(form.Method, form.URL, values)
-	if err != nil {
-		return nil, errors.Wrap(err, "error building request")
+	var req *http.Request
+	var err error
+
+	if strings.ToUpper(form.Method) == "GET" {
+		req, err = http.NewRequest(form.Method, form.URL, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "error building request")
+		}
+
+		q := req.URL.Query()
+
+		if form.Values != nil {
+			for key, value := range *form.Values {
+				for _, val := range value {
+					q.Add(key, val)
+				}
+			}
+		}
+
+		req.URL.RawQuery = q.Encode()
+
+	} else {
+		values := strings.NewReader(form.Values.Encode())
+		req, err = http.NewRequest(form.Method, form.URL, values)
+		if err != nil {
+			return nil, errors.Wrap(err, "error building request")
+		}
+		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	}
-	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
 	return req, nil
 }
