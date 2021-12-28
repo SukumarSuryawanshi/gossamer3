@@ -636,10 +636,18 @@ func (ac *Client) handlePasswordExpiring(ctx context.Context, doc *goquery.Docum
 }
 
 func (ac *Client) handleFormRedirect(ctx context.Context, doc *goquery.Document) (context.Context, *http.Request, error) {
+	loginDetails, ok := ctx.Value(ctxKey("login")).(*creds.LoginDetails)
+	if !ok {
+		fmt.Println("*** No context value for login on handleFormRedirect")
+		return ctx, nil, fmt.Errorf("no context value for 'login'")
+	}
+
 	form, err := page.NewFormFromDocument(doc, "")
 	if err != nil {
 		return ctx, nil, errors.Wrap(err, "error extracting redirect form")
 	}
+	form.URL = makeAbsoluteURL(form.URL, loginDetails.URL)
+
 	req, err := form.BuildRequest()
 	return ctx, req, err
 }
