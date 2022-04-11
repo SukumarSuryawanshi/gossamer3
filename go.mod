@@ -14,7 +14,7 @@ require (
 	github.com/avast/retry-go v2.7.0+incompatible
 	github.com/aws/aws-sdk-go v1.40.28
 	github.com/beevik/etree v1.1.0
-	github.com/cenkalti/backoff/v4 v4.1.0
+	github.com/cenkalti/backoff/v4 v4.1.3
 	github.com/danieljoos/wincred v1.1.0
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dvsekhvalnov/jose2go v0.0.0-20170216131308-f21a8cedbbae // indirect
@@ -48,20 +48,4 @@ require (
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 	gopkg.in/ini.v1 v1.62.0
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
-)
-
-require (
-	github.com/axw/gocov v1.0.0 // indirect
-	github.com/buildkite/github-release v0.0.0-20200205104344-c0a6db85594d // indirect
-	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/google/go-github v17.0.0+incompatible // indirect
-	github.com/google/go-querystring v1.1.0 // indirect
-	github.com/hashicorp/go-version v1.3.0 // indirect
-	github.com/mitchellh/gox v1.0.1 // indirect
-	github.com/mitchellh/iochan v1.0.0 // indirect
-	github.com/oleiade/reflections v1.0.1 // indirect
-	golang.org/x/oauth2 v0.0.0-20210819190943-2bc19b11175f // indirect
-	golang.org/x/tools v0.1.6 // indirect
-	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/protobuf v1.27.1 // indirect
 )
